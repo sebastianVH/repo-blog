@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Resultado de busqueda
+{% endblock title %}
+
+{% block content %}
+    <h1>Resultados</h1>
+
+    <table>
+        <thead>
+            <th>Nombre</th>
+            <th>Raza/Color</th>
+            <th>Edad/Peso</th>
+        </thead>
+        <tbody>
+
+            
+            {% for perro in perros %}
+                <tr>
+                    <td>{{ perro.nombre }}</td>
+                    <td>{{ perro.raza }}</td>
+                    <td>{{ perro.edad }}</td>
+                </tr>
+            {% endfor %}
+                
+            {% for gato in gatos %}
+                <tr>
+                    <td>{{ gato.nombre }}</td>
+                    <td>{{ gato.color }}</td>
+                    <td>{{ gato.edad }}</td>
+                </tr>
+            {% endfor %}
+
+            {% for pajaro in pajaros %}
+                <tr>
+                    <td>{{ pajaro.nombre }}</td>
+                    <td>{{ pajaro.color }}</td>
+                    <td>{{ pajaro.peso }}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock content %}
+    
