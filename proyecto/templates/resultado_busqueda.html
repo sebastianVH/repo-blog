@@ -1,47 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Resultado de busqueda
+    Post {{ post.title}}
 {% endblock title %}
 
 {% block content %}
-    <h1>Resultados</h1>
-
-    <table>
-        <thead>
-            <th>Nombre</th>
-            <th>Raza/Color</th>
-            <th>Edad/Peso</th>
-        </thead>
-        <tbody>
-
-            
-            {% for perro in perros %}
-                <tr>
-                    <td>{{ perro.nombre }}</td>
-                    <td>{{ perro.raza }}</td>
-                    <td>{{ perro.edad }}</td>
-                </tr>
-            {% endfor %}
-                
-            {% for gato in gatos %}
-                <tr>
-                    <td>{{ gato.nombre }}</td>
-                    <td>{{ gato.color }}</td>
-                    <td>{{ gato.edad }}</td>
-                </tr>
-            {% endfor %}
-
-            {% for pajaro in pajaros %}
-                <tr>
-                    <td>{{ pajaro.nombre }}</td>
-                    <td>{{ pajaro.color }}</td>
-                    <td>{{ pajaro.peso }}</td>
-                </tr>
-            {% endfor %}
-
-        </tbody>
-    </table>
+<div class="container" style="display: flex; flex-direction: column; align-items: start;">
+    <h1>{{post.title}}</h1>
+    <h3>{{post.subtitle}}</h3>
+    <p>{{post.body}}</p>
+    <img height="150px" src="{% url 'app:imagen' post.id %}" alt=""><br>
+    <small>Creado por {{post.author}}</small>
+    <small>Fecha creacion: {{post.date}}</small>
+</div>
 
 {% endblock content %}
     

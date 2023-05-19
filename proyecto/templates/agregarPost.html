@@ -5,8 +5,8 @@ Agregar Perro
 {% endblock title %}
 
 {% block content %}
-    <h1>Agregar nuevo perro</h1>
-    <form action="" method="POST">
+    <h1>Agregar nuevo post</h1>
+    <form action="" class="form-control" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formulario.as_p }}
         <input type="submit" value="Agregar">

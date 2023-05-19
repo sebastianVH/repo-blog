@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from .models import *
 from .forms import *
@@ -6,67 +6,40 @@ from .forms import *
 # Create your views here.
 
 def home(request):
-    return render(request, 'home.html', {})
+    post = Blog.objects.all()
+    return render(request, 'home.html', {'posts':post})
 
-def agregarPerro(request):
+def acercaDe(request):
+    return render(request,'acerca.html',{})
+
+def agregarPost(request):
 
     if request.method == 'GET':
-        form = PerroForm()
-        return render(request, 'agregarPerro.html', {
+        form = BlogForm()
+        return render(request, 'agregarPost.html', {
             'formulario': form
         })
     
     elif request.method == 'POST':
-        form = PerroForm(request.POST)
+        form = BlogForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return HttpResponse("Se guardo con exito!")
+            pic = form.save(commit=False)
+            pic.owner = request.user
+            pic.save()
+            form.save_m2m()
+            return redirect('/')
+        else:
+            return HttpResponse("Error")
+    return redirect ('/')
 
-    return render(request, 'agregarPerro.html', {})
+def verPost(request,id):
+    post = Blog.objects.get(id=id)
+    return render (request,'resultado_busqueda.html',{'post':post})
 
-def agregarGato(request):
-
-    if request.method == 'GET':
-        form = GatoForm()
-        return render(request, 'agregarGato.html', {
-            'formulario': form
-        })
-    
-    elif request.method == 'POST':
-        form = GatoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponse("Se guardo con exito!")
-
-    return render(request, 'agregarGato.html', {})
-
-def agregarPajaro(request):
-
-    if request.method == 'GET':
-        form = PajaroForm()
-        return render(request, 'agregarPajaro.html', {
-            'formulario': form
-        })
-    
-    elif request.method == 'POST':
-        form = PajaroForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponse("Se guardo con exito!")
-
-    return render(request, 'agregarPajaro.html', {})
-
-
-def buscar(request):
-
-    info = request.GET.get('query')
-    
-    lista_de_perros = Perro.objects.filter(nombre__icontains=info)
-    lista_de_gatos = Gato.objects.filter(nombre__icontains=info)
-    lista_de_pajaros = Pajaro.objects.filter(nombre__icontains=info)
-
-    return render(request, 'resultado_busqueda.html', {
-        'perros': lista_de_perros,
-        'gatos': lista_de_gatos,
-        'pajaros': lista_de_pajaros,
-    })
+def stream_file(request, id):
+    ad = get_object_or_404(Blog, id=id)
+    response = HttpResponse()
+    response['Content-Type'] = ad.content_type
+    response['Content-Length'] = len(ad.picture)
+    response.write(ad.picture)
+    return response

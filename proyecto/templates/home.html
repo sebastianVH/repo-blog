@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 
-
 {% block title %}
-    Hola esto es un titulo
+    Mi blog
 {% endblock title %}
 
-
 {% block content %}
-    <p>Veterinaria</p>
-    <form action="buscar/" method="GET">
-        <input type="text" name="query" placeholder="Buscar un animal">
-        <input type="submit" value="Buscar">
-    </form>
-    <a href="agregarPerro/">Agregar un Perro</a>
-    <a href="agregarGato/">Agregar un Gato</a>
-    <a href="agregarPajaro">Agregar un Pajaro</a>
+    <h3>Publicaciones</h3>
+    {% if posts|length >= 1 %}
+    <ul>
+            {% for post in posts  %}
+            <li><a href="pages/{{post.id}}">{{ post.title}}</a></li>
+            {% endfor %}
+    </ul>
+    {% else %}
+    <p>No Hay post disponibles</p>
+    {% endif %}
+
+    <a href="agregarPost/">Agregar un Post</a>
 {% endblock content %}
     

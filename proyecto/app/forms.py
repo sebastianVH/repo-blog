@@ -1,17 +1,27 @@
 from django import forms
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from .models import *
 
-class PerroForm(forms.ModelForm):
+class BlogForm(forms.ModelForm):
+    picture = forms.FileField(required=False)
+    upload_field_name = 'picture'
     class Meta:
-        model = Perro
-        fields= ['nombre', 'raza', 'edad']
+        model = Blog
+        fields= ['title', 'subtitle', 'body','author','picture']
+    
+    def save(self, commit=True):
+        instance = super(BlogForm, self).save(commit=False)
 
-class GatoForm(forms.ModelForm):
-    class Meta:
-        model = Gato
-        fields= ['nombre', 'color', 'edad']
+        # We only need to adjust picture if it is a freshly uploaded file
+        f = instance.picture   # Make a copy
+        if isinstance(f, InMemoryUploadedFile):  # Extract data from the form to the model
+            bytearr = f.read()
+            instance.content_type = f.content_type
+            instance.picture = bytearr  # Overwrite with the actual image data
 
-class PajaroForm(forms.ModelForm):
-    class Meta:
-        model = Pajaro
-        fields= ['nombre', 'color', 'peso']        
+        if commit:
+            instance.save()
+            self.save_m2m()
+
+        return instance
