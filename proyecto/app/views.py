@@ -43,3 +43,29 @@ def stream_file(request, id):
     response['Content-Length'] = len(ad.picture)
     response.write(ad.picture)
     return response
+
+def eliminarPost(request,id):
+    post = Blog.objects.get(id=id)
+    post.delete()
+    return redirect('/')
+
+def editarPost(request,id):
+
+    if request.method == 'GET':
+        ad = get_object_or_404(Blog, id=id)
+        form = BlogForm(instance=ad)
+        ctx = {'formulario': form}
+        return render(request, 'agregarPost.html', ctx)
+
+    if request.method == 'POST':
+        ad = get_object_or_404(Blog, id=id,)
+        form = BlogForm(request.POST, request.FILES or None, instance=ad)
+
+        if not form.is_valid():
+            ctx = {'formulario': form}
+            return render(request, 'agregarPost.html', ctx)
+
+        pic = form.save(commit=False)
+        pic.save()
+        form.save_m2m()
+        return redirect('/')

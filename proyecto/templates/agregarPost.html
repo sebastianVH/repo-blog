@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Agregar Perro
+Agregar Post
 {% endblock title %}
 
 {% block content %}
@@ -9,6 +9,6 @@ Agregar Perro
     <form action="" class="form-control" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formulario.as_p }}
-        <input type="submit" value="Agregar">
+        <input class="btn btn-success" type="submit" value="Agregar">
     </form>
 {% endblock content %}

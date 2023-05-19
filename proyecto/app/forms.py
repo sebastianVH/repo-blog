@@ -25,3 +25,6 @@ class BlogForm(forms.ModelForm):
             self.save_m2m()
 
         return instance
+
+# post = BlogForm()
+# post.save()

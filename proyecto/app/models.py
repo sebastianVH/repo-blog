@@ -9,7 +9,7 @@ class Blog(models.Model):
     author = models.CharField(max_length=50)
     date = models.DateField(auto_now_add=True)
     picture = models.BinaryField(null=True, editable=True)
-    content_type = models.CharField(max_length=256, null=True, help_text='Aca guardamos el archivo')
+    content_type = models.CharField(max_length=256, null=True, help_text='Aca guardamos el tipo de archivo (MIME)')
     
     def __str__(self):
         return self.title
